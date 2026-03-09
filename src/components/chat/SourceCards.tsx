@@ -3,50 +3,48 @@
 import { useState, type KeyboardEvent } from "react";
 import { Check } from "lucide-react";
 import { SourceOption } from "@/lib/types";
+import { useChatStore } from "@/store/chatStore";
 
 interface SourceCardsProps {
   sources: SourceOption[];
 }
 
 export function SourceCards({ sources }: SourceCardsProps) {
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(() => {
-    const initial = new Set<string>();
-    for (const source of sources) {
-      if (source.selected) initial.add(source.id);
-    }
-    return initial;
+  const [selectedId, setSelectedId] = useState<string | null>(() => {
+    const preselected = sources.find((s) => s.selected);
+    return preselected ? preselected.id : null;
   });
+  const [submitted, setSubmitted] = useState(false);
 
-  const toggleSelection = (id: string) => {
-    setSelectedIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
-      return next;
-    });
+  const handleSelect = (source: SourceOption) => {
+    if (submitted) return;
+
+    setSelectedId(source.id);
+    setSubmitted(true);
+    useChatStore.getState().sendMessage(source.title);
   };
 
-  const handleKeyDown = (e: KeyboardEvent, id: string) => {
+  const handleKeyDown = (e: KeyboardEvent, source: SourceOption) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      toggleSelection(id);
+      handleSelect(source);
     }
   };
 
   return (
-    <div className="flex gap-4 w-full">
+    <div
+      className={`flex gap-4 w-full ${submitted ? "pointer-events-none opacity-70" : ""}`}
+    >
       {sources.map((source) => {
-        const isSelected = selectedIds.has(source.id);
+        const isSelected = source.id === selectedId;
         return (
           <div
             key={source.id}
             role="button"
-            tabIndex={0}
-            onClick={() => toggleSelection(source.id)}
-            onKeyDown={(e) => handleKeyDown(e, source.id)}
+            tabIndex={submitted ? -1 : 0}
+            onClick={() => handleSelect(source)}
+            onKeyDown={(e) => handleKeyDown(e, source)}
+            aria-disabled={submitted}
             className={`flex-1 rounded-lg p-3 cursor-pointer transition-colors ${
               isSelected
                 ? "bg-white border-2 border-accent-purple"

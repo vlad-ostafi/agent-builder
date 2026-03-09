@@ -54,7 +54,7 @@ export function getScriptForAgent(_agentId: string): ScriptedExchange[] {
               id: "cre",
               title: "Commercial Real Estate",
               description: "Investment properties, development finance",
-              selected: true,
+              selected: false,
             },
             {
               id: "corporate",
@@ -78,21 +78,114 @@ export function getScriptForAgent(_agentId: string): ScriptedExchange[] {
       assistantMessages: [
         {
           type: "text",
-          text: "Got it. Do you have an existing Credit Memo template you'd like the agent to populate, or should I suggest one from our library?",
+          text: "Please upload your Credit Memo template. I'll analyse it and identify the sections the agent will populate.",
         },
+        { type: "upload" },
       ],
       assistantText:
-        "Got it. Do you have an existing Credit Memo template you'd like the agent to populate, or should I suggest one from our library?",
+        "Please upload your Credit Memo template. I'll analyse it and identify the sections the agent will populate.",
     },
     {
       assistantMessages: [
         {
           type: "text",
-          text: "Please upload your Credit Memo template. I'll analyse it and identify the sections the agent will populate.",
+          text: "I've analysed your template. I found **6 sections** that the agent can populate.",
+        },
+        {
+          type: "text",
+          text: "Here's what I identified:",
+        },
+        {
+          type: "sections-table",
+          sections: [
+            {
+              id: "header",
+              name: "Header & Transaction Summary",
+              dataSources: "Term Sheet, Deal Data",
+              status: "auto",
+            },
+            {
+              id: "counterparties",
+              name: "Counterparties",
+              dataSources: "Companies House, Deal Data",
+              status: "auto",
+            },
+            {
+              id: "facilities",
+              name: "Facilities",
+              dataSources: "Term Sheet",
+              status: "auto",
+            },
+            {
+              id: "security",
+              name: "Security package",
+              dataSources: "Term Sheet, Valuation",
+              status: "configured",
+            },
+            {
+              id: "financial",
+              name: "Financial analysis",
+              dataSources: "Financial Statements",
+              status: "needs-input",
+            },
+            {
+              id: "climate",
+              name: "Climate Risk",
+              dataSources: "Term Sheet, Valuation",
+              status: "needs-input",
+            },
+          ],
+        },
+        {
+          type: "text",
+          text: "Would you like me to:\n\n1. Walk you through each section?\n2. Focus only on the sections that need your input?\n3. Help you add a custom section?",
         },
       ],
       assistantText:
-        "Please upload your Credit Memo template. I'll analyse it and identify the sections the agent will populate.",
+        "I've analysed your template. I found 6 sections that the agent can populate.",
+    },
+    {
+      assistantMessages: [
+        {
+          type: "text",
+          text: "Got it. Let's configure the Financial Analysis section. I need to understand your requirements:",
+        },
+        {
+          type: "text",
+          text: "What financial metrics should the agent calculate and present?",
+        },
+        {
+          type: "sources",
+          sources: [
+            {
+              id: "dscr",
+              title: "DSCR",
+              description: "Debt Service Coverage Ratio",
+              selected: false,
+            },
+            {
+              id: "ltv-ltc",
+              title: "LTV / LTC",
+              description: "Loan-to-Value, Loan-to-Cost",
+              selected: false,
+            },
+            {
+              id: "icr",
+              title: "ICR",
+              description: "Interest Coverage Ratio",
+              selected: false,
+            },
+            {
+              id: "custom",
+              title: "Custom",
+              description: "Define your own metrics",
+              selected: false,
+            },
+          ],
+        },
+      ],
+      assistantText:
+        "Got it. Let's configure the Financial Analysis section. I need to understand your requirements:\n\nWhat financial metrics should the agent calculate and present?",
     },
   ];
 }

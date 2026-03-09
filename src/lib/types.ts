@@ -107,11 +107,22 @@ export interface TaskDependencyExport {
 
 // Chat types
 
+export type SectionStatus = "auto" | "configured" | "needs-input";
+
+export interface SectionRow {
+  id: string;
+  name: string;
+  dataSources: string;
+  status: SectionStatus;
+}
+
 export type MessageContentBlock =
   | { type: "status"; text: string }
   | { type: "text"; text: string }
   | { type: "form"; title: string; fields: FormField[] }
-  | { type: "sources"; sources: SourceOption[] };
+  | { type: "sources"; sources: SourceOption[] }
+  | { type: "upload" }
+  | { type: "sections-table"; sections: SectionRow[] };
 
 export interface FormField {
   id: string;
@@ -129,11 +140,17 @@ export interface SourceOption {
   selected: boolean;
 }
 
+export interface FileAttachment {
+  name: string;
+  size: number; // bytes
+}
+
 export interface ChatMessage {
   id: string;
   role: "user" | "assistant";
   content: string;
   structuredContent?: MessageContentBlock[];
+  attachment?: FileAttachment;
   timestamp: Date;
 }
 
