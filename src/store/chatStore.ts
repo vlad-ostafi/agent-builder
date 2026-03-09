@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { ChatMessage, MessageContentBlock } from "@/lib/types";
-import { getScriptForAgent } from "@/lib/chat-scripts";
+import { getScriptForAgent, getInitialUserMessage } from "@/lib/chat-scripts";
 
 interface ChatStoreState {
   messages: ChatMessage[];
@@ -30,17 +30,50 @@ export const useChatStore = create<ChatStoreState>((set, get) => ({
   initChat: (agentId: string) => {
     const { _timeoutId } = get();
     if (_timeoutId) clearTimeout(_timeoutId);
+
+    const userMessage: ChatMessage = {
+      id: crypto.randomUUID(),
+      role: "user",
+      content: getInitialUserMessage(agentId),
+      timestamp: new Date(),
+    };
+
     set({
-      messages: [],
-      isTyping: false,
+      messages: [userMessage],
+      isTyping: true,
       scriptIndex: 0,
       agentId,
       _timeoutId: null,
     });
+
+    const timeoutId = setTimeout(() => {
+      const script = getScriptForAgent(agentId);
+      const exchange = script[0];
+
+      const assistantMessage: ChatMessage = {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content: exchange ? exchange.assistantText : FALLBACK_TEXT,
+        structuredContent: exchange
+          ? exchange.assistantMessages
+          : FALLBACK_BLOCKS,
+        timestamp: new Date(),
+      };
+
+      set((state) => ({
+        messages: [...state.messages, assistantMessage],
+        isTyping: false,
+        scriptIndex: 1,
+        _timeoutId: null,
+      }));
+    }, 1200);
+
+    set({ _timeoutId: timeoutId });
   },
 
   sendMessage: (text: string) => {
-    const { scriptIndex, agentId } = get();
+    const { scriptIndex, agentId, _timeoutId } = get();
+    if (_timeoutId) clearTimeout(_timeoutId);
 
     const userMessage: ChatMessage = {
       id: crypto.randomUUID(),

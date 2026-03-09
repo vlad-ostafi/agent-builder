@@ -1,5 +1,9 @@
 import { ScriptedExchange } from "./types";
 
+export function getInitialUserMessage(_agentId: string): string {
+  return "I want to configure a new Credit Memo agent";
+}
+
 export function getScriptForAgent(_agentId: string): ScriptedExchange[] {
   return [
     {
