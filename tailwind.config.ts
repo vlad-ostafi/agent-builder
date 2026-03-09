@@ -36,9 +36,25 @@ const config: Config = {
         "card-description": "#475467",
         "input-border": "#D5D7DA",
         "input-placeholder": "#98A2B3",
+        "chat-text": "#414651",
+        "chat-text-secondary": "#535862",
+        "chat-border": "#E9EAEB",
+        "chat-card-bg": "#FAFAFA",
+        "accent-purple-dark": "#6941C6",
       },
       fontFamily: {
         sans: ["Inter", "sans-serif"],
+      },
+      keyframes: {
+        chatDotBounce: {
+          "0%, 80%, 100%": { opacity: "0.3", transform: "scale(0.8)" },
+          "40%": { opacity: "1", transform: "scale(1)" },
+        },
+      },
+      animation: {
+        "chat-dot-1": "chatDotBounce 1.4s infinite ease-in-out 0ms",
+        "chat-dot-2": "chatDotBounce 1.4s infinite ease-in-out 200ms",
+        "chat-dot-3": "chatDotBounce 1.4s infinite ease-in-out 400ms",
       },
     },
   },

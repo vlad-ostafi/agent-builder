@@ -104,3 +104,40 @@ export interface TaskDependencyExport {
   label: string;
   dependencyType: "blocks" | "informs";
 }
+
+// Chat types
+
+export type MessageContentBlock =
+  | { type: "status"; text: string }
+  | { type: "text"; text: string }
+  | { type: "form"; title: string; fields: FormField[] }
+  | { type: "sources"; sources: SourceOption[] };
+
+export interface FormField {
+  id: string;
+  label: string;
+  required: boolean;
+  placeholder: string;
+  helpText?: string;
+  fieldType: "text" | "textarea";
+}
+
+export interface SourceOption {
+  id: string;
+  title: string;
+  description: string;
+  selected: boolean;
+}
+
+export interface ChatMessage {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  structuredContent?: MessageContentBlock[];
+  timestamp: Date;
+}
+
+export interface ScriptedExchange {
+  assistantMessages: MessageContentBlock[];
+  assistantText: string;
+}

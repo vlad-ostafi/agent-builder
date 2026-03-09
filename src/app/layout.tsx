@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   title: "Agent Builder",
   description:
     "Visual agent builder for designing and configuring AI agent workflows with drag-and-drop components.",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({

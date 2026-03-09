@@ -1,4 +1,5 @@
 import { Settings, Plus } from "lucide-react";
+import Link from "next/link";
 import { AgentDefinition } from "@/lib/types";
 import { CATEGORY_COLORS } from "@/lib/category-colors";
 
@@ -33,9 +34,12 @@ export function AgentCard({ agent }: AgentCardProps) {
 
       {/* Footer */}
       <div className="flex items-center justify-between mt-3">
-        <button className="text-accent-purple text-sm font-medium cursor-pointer hover:underline">
+        <Link
+          href={`/chat/${agent.id}`}
+          className="text-accent-purple text-sm font-medium cursor-pointer hover:underline"
+        >
           Initiate
-        </button>
+        </Link>
         <button aria-label="Add agent" className="flex items-center justify-center w-6 h-6 rounded-full border border-card-border text-content-text-muted hover:text-content-text hover:border-content-text transition-colors">
           <Plus size={14} />
         </button>

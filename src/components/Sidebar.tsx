@@ -1,3 +1,4 @@
+import Image from "next/image";
 import {
   type LucideIcon,
   Sparkles,
@@ -41,9 +42,7 @@ export function Sidebar() {
     <aside className="flex flex-col items-center w-[92px] h-full bg-sidebar-bg border-r border-sidebar-border shrink-0">
       {/* Logo */}
       <div className="flex items-center justify-center w-full py-5">
-        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-accent-purple/20">
-          <Sparkles size={22} className="text-accent-purple" />
-        </div>
+        <Image src="/logo.png" alt="Covecta" width={40} height={40} />
       </div>
 
       {/* Navigation */}
